@@ -1,5 +1,7 @@
-# Execute a command
-exec { 'pkill killmenow'
-	path =>'/usr/bin:usr/sbin:/bin'
+# Execute a commad
+exec { 'killmenow':
+  command     => 'pkill killmenow',
+  path        => ['/bin', '/usr/bin'],
+  refreshonly => true,
 }
 
