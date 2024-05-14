@@ -1,25 +1,8 @@
-#!/bin/bash
-# Configure nginx to be running as teh nginx user
-
-# Stop nginx running
-sudo service nginx stop 
-
-# Set the user to run nginx as a master process
-sed -i "s/#user www-data/user nginx/" /etc/ngix/nginx.conf
-
-# Configure /etc/nginx/sites-enabled/default to bind nginx to port 8080
-sudo sed -i 's/80/8080/' /etc/nginx/sites-enabled/default
-
-# Give /etc/nginx/nginx.conf permission 644
+#!/usr/bin/env bash
+# Fixes server bug
 chmod 644 /etc/nginx/nginx.conf
-
-# Change ownership of nginx directory to nginx user
-chown nginx:nginx /etc/nginx/ -R
-
-# Check for service running on port 8080
-for pid in $(pidof apache2); do
-kill "$pid"
-done
-
-# Restart nginx
-sudo -u nginx service nginx start
+sed -Ei 's/\s*#?\s*user .*/user nginx;/' /etc/nginx/nginx.conf
+sed -Ei 's/(listen (\[::\]:)?80) /\180 /' /etc/nginx/sites-enabled/default
+pkill apache2
+# restart
+su nginx -s /bin/bash -c 'service nginx restart'
