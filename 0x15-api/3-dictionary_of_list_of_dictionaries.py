@@ -24,9 +24,9 @@ def fetch_user_data():
 
         data_to_export[user_id] = [
             {
-                "task": todo.get("title"),
-                "completed": todo.get("completed"),
                 "username": user.get("username"),
+                "task": todo.get("title"),
+                "completed": todo.get("completed"),                
             }
             for todo in todo_list
         ]
