@@ -1,11 +1,4 @@
 #!/usr/bin/python3
-"""
-Returns to-do list information for a given employee ID.
-
-This script takes an employee ID as a command-line argument and fetches
-the corresponding user information and to-do list from the JSONPlaceholder API.
-It then prints the tasks completed by the employee.
-"""
 import requests
 import sys
 
@@ -43,7 +36,7 @@ def get_employee_todo_progress(employee_id):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python script.py <employee_id>")
+        print("Usage: ./script.py <employee_id>")
         sys.exit(1)
 
     try:
