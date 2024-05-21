@@ -1,38 +1,40 @@
 #!/usr/bin/python3
+"""
+Returns to-do list information for a given employee ID.
+
+This script takes an employee ID as a command-line argument and fetches
+the corresponding user information and to-do list from the JSONPlaceholder API.
+It then prints the tasks completed by the employee.
+"""
+
 import requests
 import sys
 
 def get_employee_todo_progress(employee_id):
-    # Define the base URLs for the API
-    users_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
-    todos_url = f"https://jsonplaceholder.typicode.com/todos?userId={employee_id}"
+    """
+    Fetch and display the todo list progress of an employee.
 
-    # Fetch the employee's information
-    user_response = requests.get(users_url)
-    if user_response.status_code != 200:
-        print(f"Failed to fetch user data: {user_response.status_code}")
-        return
+    Args:
+        employee_id (int): The ID of the employee.
+    """
+    url = "https://jsonplaceholder.typicode.com/"
 
-    user_data = user_response.json()
-    employee_name = user_data.get('name')
+    # Fetch user information
+    user = requests.get(url + "users/{}".format(employee_id)).json()
 
-    # Fetch the employee's TODO list
-    todos_response = requests.get(todos_url)
-    if todos_response.status_code != 200:
-        print(f"Failed to fetch TODO data: {todos_response.status_code}")
-        return
+    # Fetch todos for the user
+    params = {"userId": employee_id}
+    todos = requests.get(url + "todos", params=params).json()
 
-    todos_data = todos_response.json()
+    # Filter completed tasks
+    completed = [t.get("title") for t in todos if t.get("completed") is True]
 
-    # Calculate the number of completed and total tasks
-    total_tasks = len(todos_data)
-    done_tasks = [todo for todo in todos_data if todo['completed']]
-    number_of_done_tasks = len(done_tasks)
+    # Display employee's task completion progress
+    print("Employee {} is done with tasks({}/{}):".format(
+        user.get("name"), len(completed), len(todos)))
 
-    # Print the progress report
-    print(f"Employee {employee_name} is done with tasks({number_of_done_tasks}/{total_tasks}):")
-    for task in done_tasks:
-        print(f"\t {task['title']}")
+    for complete in completed:
+        print("\t {}".format(complete))
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
