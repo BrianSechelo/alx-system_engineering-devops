@@ -1,0 +1,1 @@
+This project focuses on identifying and resolving a critical issue causing a 500 Internal Server Error on an Apache web server hosting a WordPress site. The issue was debugged using strace, fixed manually, and then automated using Puppet to ensure a permanent resolution and future prevention.
